@@ -61,7 +61,7 @@ const Home: React.FC = () => {
                  </Fade>
 
                                  <Fade direction="right">
-                <Button variant="outline" size="lg" className="text-sm sm:text-lg px-6 sm:px-8 py-3 sm:py-4 border-white text-white hover:bg-white hover:text-emerald-900">
+                <Button variant="outline" size="lg" className="text-sm sm:text-lg px-6 sm:px-8 py-3 sm:py-4 border-white text-white hover:bg-white hover:text-black hover:text-emerald-900">
                   <Link to="/categories">Voir les catégories</Link>
                 </Button>
                  </Fade>
@@ -164,14 +164,14 @@ const Home: React.FC = () => {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-8 animate-slide-up">
-              <div className="flex items-start space-x-3">
+              <div className="flex flex-col items-start items-center justify-center space-x-3">
+                <div className="flex gap-2">
                 <AlertCircle className="h-6 w-6 text-red-600 mt-1" />
-                <div>
                   <h3 className="text-lg font-semibold text-red-900 mb-2">Erreur de connexion</h3>
-                  <p className="text-red-800">{error}</p>
                 </div>
-              </div>
+
+                  <p className="text-red-800">Vérifiez votre connexion et veuillez Réessayer</p>
+                
             </div>
           )}
 

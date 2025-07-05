@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { Fade, Slide, Bounce, Zoom, Flip, Rotate, Roll, JackInTheBox, Hinge } from "react-awesome-reveal";
 
 const Footer: React.FC = () => {
   return (
@@ -8,6 +9,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo et description */}
+          <Fade direction="left"cascade>
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
               <div className="bg-primary-600 p-2 rounded-lg">
@@ -106,21 +108,9 @@ const Footer: React.FC = () => {
               </div>
             </div>
           </div>
+        </Fade>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
-            © 2024 FriedShop. Tous droits réservés.
-          </p>
-          <div className="flex space-x-6 mt-4 sm:mt-0 text-sm">
-            <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
-              Politique de confidentialité
-            </Link>
-            <Link to="/legal" className="text-gray-400 hover:text-white transition-colors duration-200">
-              Mentions légales
-            </Link>
-          </div>
-        </div>
       </div>
     </footer>
   );

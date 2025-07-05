@@ -66,7 +66,7 @@ const Checkout: React.FC = () => {
   }
 
   // Zones de livraison gratuite
-  const freeShippingZones = ['Cococodji', 'Hêvié', 'Pahou', 'Calavi'];
+  const freeShippingZones = ['UAC (Abomey-Calavi)'];
 
   const deliveryOptions: DeliveryOption[] = [
     {

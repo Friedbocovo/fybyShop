@@ -4,6 +4,8 @@ import ProductCard from '../components/UI/ProductCard';
 import Button from '../components/UI/Button';
 import { useContentful } from '../contexts/ContentfulContext';
 import { searchProducts } from '../lib/contentful';
+import { Fade, Slide, Bounce, Zoom, Flip, Rotate, Roll, JackInTheBox, Hinge } from "react-awesome-reveal";
+
 
 const Shop: React.FC = () => {
   const { products, categories, isLoading, isConnected, error, refreshData } = useContentful();
@@ -106,7 +108,9 @@ const Shop: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             <div className="flex-1">
+              <Fade direction="left">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Boutique</h1>
+             </Fade>
               {searchTerm && (
                 <p className="text-gray-600 mt-1">
                   Résultats pour "{searchTerm}"
@@ -122,6 +126,8 @@ const Shop: React.FC = () => {
               )}
             </div>
             
+                          <Fade direction="right">
+
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
               {/* Search */}
               <div className="relative flex-1 sm:flex-none">
@@ -161,43 +167,16 @@ const Shop: React.FC = () => {
                 Filtres
               </Button>
             </div>
+          </Fade>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Contentful Status */}
-        {!isConnected && (
-          <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 mb-8">
-            <div className="flex items-start space-x-3">
-              <AlertCircle className="h-6 w-6 text-orange-600 mt-1" />
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-orange-900 mb-2">Configuration Contentful requise</h3>
-                <p className="text-orange-800 mb-4">
-                  Pour afficher les produits, veuillez configurer vos clés API Contentful
-                </p>
-                <Button variant="outline" size="sm" onClick={refreshData} icon={RefreshCw}>
-                  Réessayer la connexion
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-8">
-            <div className="flex items-start space-x-3">
-              <AlertCircle className="h-6 w-6 text-red-600 mt-1" />
-              <div>
-                <h3 className="text-lg font-semibold text-red-900 mb-2">Erreur de connexion</h3>
-                <p className="text-red-800">{error}</p>
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
+          <Fade direction="left">
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
@@ -217,7 +196,7 @@ const Shop: React.FC = () => {
                   </button>
                 </div>
               </div>
-              
+                            <Rotate direction="top-left">
               {/* Category Filter */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -236,8 +215,11 @@ const Shop: React.FC = () => {
                   ))}
                 </select>
               </div>
+            </Rotate>
 
               {/* Brand Filter */}
+                          <Rotate direction="top-left">
+
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Marque
@@ -255,8 +237,10 @@ const Shop: React.FC = () => {
                   ))}
                 </select>
               </div>
-
+</Rotate>
               {/* Sort By */}
+              <Rotate direction="top-left">
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Trier par
@@ -273,25 +257,27 @@ const Shop: React.FC = () => {
                   <option value="newest">Nouveautés</option>
                 </select>
               </div>
+</Rotate>
             </div>
           </div>
-
+        </Fade>
           {/* Products Grid */}
           <div className="flex-1">
             {filteredProducts.length === 0 ? (
+              <Zoom>
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
                   <Search className="h-16 w-16 mx-auto" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {isConnected ? 'Aucun produit trouvé' : 'Aucun produit disponible'}
+                  {isConnected ? 'Aucun produit trouvé' : 'Votre connexion es instable'}
                 </h3>
                 <p className="text-gray-600 mb-6">
                   {isConnected 
                     ? searchTerm 
                       ? `Aucun résultat pour "${searchTerm}". Essayez des termes différents.`
                       : 'Essayez de modifier vos critères de recherche.'
-                    : 'Configurez Contentful pour afficher vos produits.'
+                    : 'Vérifiez votre connexion et veuillez Réessayer .'
                   }
                 </p>
                 {isConnected && (
@@ -300,6 +286,7 @@ const Shop: React.FC = () => {
                   </Button>
                 )}
               </div>
+            </Zoom>
             ) : (
               <div className={`grid gap-6 ${
                 viewMode === 'grid' 
@@ -307,13 +294,14 @@ const Shop: React.FC = () => {
                   : 'grid-cols-1'
               }`}>
                 {filteredProducts.map((product, index) => (
+                  <Rotate  cascade>
                   <ProductCard
                     key={product.id}
                     product={product}
                     compact={viewMode === 'list'}
                     className="animate-slide-up"
                     style={{ animationDelay: `${index * 0.05}s` } as React.CSSProperties}
-                  />
+                  /></Rotate>
                 ))}
               </div>
             )}

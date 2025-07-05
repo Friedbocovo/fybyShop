@@ -70,9 +70,7 @@ function App() {
                       </Routes>
                     </PageWrapper>
                   </main>
-                  <Fade direction="up">
                   <Footer />
-                </Fade>
                 </div>
               </Router>
             </AuthProvider>
