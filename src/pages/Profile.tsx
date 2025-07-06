@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { User, Settings, Package, Heart, MapPin, Phone, Mail, Edit3, Save, X, Eye, EyeOff, CreditCard, Bell, Shield, LogOut, Calendar, Star, Truck, Lock, Check } from 'lucide-react';
+import { User, Settings, Package, Heart, MapPin, Phone, Mail, Edit3, Save, X, Eye, EyeOff, CreditCard, Bell, Shield, LogOut, Calendar, Star, Truck, Lock, Check, QrCode, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../components/UI/Button';
 import ProductCard from '../components/UI/ProductCard';
+import QRCodeGenerator from '../components/QRCode/QRCodeGenerator';
 import ScrollAnimation from '../components/ScrollAnimations';
 import { useFirebase } from '../contexts/FirebaseContext';
 import { useFavorites } from '../contexts/FavoritesContext';
@@ -51,6 +52,15 @@ const Profile: React.FC = () => {
       });
     }
   }, [userProfile]);
+
+  // Check URL params for tab
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    if (tab && ['profile', 'orders', 'favorites', 'settings'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, []);
 
   // Si l'utilisateur n'est pas connecté
   if (!isAuthenticated) {
@@ -451,20 +461,33 @@ const Profile: React.FC = () => {
                                 ))}
                               </div>
 
-                              <div className="flex flex-col sm:flex-row justify-end mt-4 space-y-2 sm:space-y-0 sm:space-x-3">
+                              <div className="flex flex-col sm:flex-row justify-between mt-4 space-y-2 sm:space-y-0 sm:space-x-3">
+                                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => setSelectedOrder(order)}
+                                    className="w-full sm:w-auto hover:scale-105 transition-transform duration-200"
+                                  >
+                                    Voir détails
+                                  </Button>
+                                  {order.status === 'delivered' && (
+                                    <Button variant="outline" size="sm" icon={Star} className="w-full sm:w-auto hover:scale-105 transition-transform duration-200">
+                                      Laisser un avis
+                                    </Button>
+                                  )}
+                                </div>
+                                
+                                {/* QR Code Button */}
                                 <Button 
                                   variant="outline" 
                                   size="sm"
-                                  onClick={() => setSelectedOrder(order)}
-                                  className="w-full sm:w-auto hover:scale-105 transition-transform duration-200"
+                                  icon={QrCode}
+                                  onClick={() => setSelectedOrder({...order, showQR: true})}
+                                  className="w-full sm:w-auto hover:scale-105 transition-transform duration-200 text-emerald-600 border-emerald-300 hover:bg-emerald-50"
                                 >
-                                  Voir détails
+                                  QR Code
                                 </Button>
-                                {order.status === 'delivered' && (
-                                  <Button variant="outline" size="sm" icon={Star} className="w-full sm:w-auto hover:scale-105 transition-transform duration-200">
-                                    Laisser un avis
-                                  </Button>
-                                )}
                               </div>
                             </div>
                           </ScrollAnimation>
@@ -643,10 +666,10 @@ const Profile: React.FC = () => {
         {selectedOrder && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <ScrollAnimation animation="scale-in">
-              <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                 <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                    Détails de la commande #{selectedOrder.id}
+                    {selectedOrder.showQR ? 'QR Code de la commande' : 'Détails de la commande'} #{selectedOrder.id}
                   </h2>
                   <button
                     onClick={() => setSelectedOrder(null)}
@@ -656,67 +679,84 @@ const Profile: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="p-4 sm:p-6 space-y-6">
-                  {/* Order Info */}
-                  <ScrollAnimation animation="fade-in-up">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-gray-600">Date de commande</p>
-                        <p className="font-semibold">
-                          {selectedOrder.createdAt?.toDate ? selectedOrder.createdAt.toDate().toLocaleDateString('fr-FR') : 'Date inconnue'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Statut</p>
-                        <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedOrder.status)} animate-pulse`}>
-                          {getStatusText(selectedOrder.status)}
-                        </span>
-                      </div>
+                <div className="p-4 sm:p-6">
+                  {selectedOrder.showQR ? (
+                    // QR Code View
+                    <div className="text-center">
+                      <QRCodeGenerator 
+                        orderId={selectedOrder.id}
+                        orderData={selectedOrder}
+                        className="mb-6"
+                      />
+                      <p className="text-gray-600 mb-4">
+                        Présentez ce QR code lors de la livraison ou du retrait en magasin
+                      </p>
                     </div>
-                  </ScrollAnimation>
+                  ) : (
+                    // Order Details View
+                    <div className="space-y-6">
+                      {/* Order Info */}
+                      <ScrollAnimation animation="fade-in-up">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-600">Date de commande</p>
+                            <p className="font-semibold">
+                              {selectedOrder.createdAt?.toDate ? selectedOrder.createdAt.toDate().toLocaleDateString('fr-FR') : 'Date inconnue'}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-600">Statut</p>
+                            <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedOrder.status)} animate-pulse`}>
+                              {getStatusText(selectedOrder.status)}
+                            </span>
+                          </div>
+                        </div>
+                      </ScrollAnimation>
 
-                  {/* Items */}
-                  <ScrollAnimation animation="fade-in-up" delay={100}>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Produits commandés</h3>
-                      <div className="space-y-3">
-                        {selectedOrder.items.map((item: any, index: number) => (
-                          <ScrollAnimation key={item.id} animation="fade-in-left" delay={index * 50}>
-                            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
-                              />
-                              <div className="flex-1">
-                                <p className="font-medium text-gray-900 text-sm sm:text-base">{item.name}</p>
-                                <p className="text-sm text-gray-600">
-                                  Quantité : {item.quantity} × {item.price.toLocaleString('fr-FR')} FCFA
-                                </p>
-                              </div>
-                              <div className="text-right">
-                                <p className="font-semibold text-gray-900 text-sm sm:text-base">
-                                  {(item.quantity * item.price).toLocaleString('fr-FR')} FCFA
-                                </p>
-                              </div>
-                            </div>
-                          </ScrollAnimation>
-                        ))}
-                      </div>
-                    </div>
-                  </ScrollAnimation>
+                      {/* Items */}
+                      <ScrollAnimation animation="fade-in-up" delay={100}>
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Produits commandés</h3>
+                          <div className="space-y-3">
+                            {selectedOrder.items.map((item: any, index: number) => (
+                              <ScrollAnimation key={item.id} animation="fade-in-left" delay={index * 50}>
+                                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
+                                  />
+                                  <div className="flex-1">
+                                    <p className="font-medium text-gray-900 text-sm sm:text-base">{item.name}</p>
+                                    <p className="text-sm text-gray-600">
+                                      Quantité : {item.quantity} × {item.price.toLocaleString('fr-FR')} FCFA
+                                    </p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="font-semibold text-gray-900 text-sm sm:text-base">
+                                      {(item.quantity * item.price).toLocaleString('fr-FR')} FCFA
+                                    </p>
+                                  </div>
+                                </div>
+                              </ScrollAnimation>
+                            ))}
+                          </div>
+                        </div>
+                      </ScrollAnimation>
 
-                  {/* Total */}
-                  <ScrollAnimation animation="fade-in-up" delay={200}>
-                    <div className="border-t border-gray-200 pt-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-lg font-semibold text-gray-900">Total</span>
-                        <span className="text-xl sm:text-2xl font-bold text-gray-900">
-                          {selectedOrder.total.toLocaleString('fr-FR')} FCFA
-                        </span>
-                      </div>
+                      {/* Total */}
+                      <ScrollAnimation animation="fade-in-up" delay={200}>
+                        <div className="border-t border-gray-200 pt-4">
+                          <div className="flex justify-between items-center">
+                            <span className="text-lg font-semibold text-gray-900">Total</span>
+                            <span className="text-xl sm:text-2xl font-bold text-gray-900">
+                              {selectedOrder.total.toLocaleString('fr-FR')} FCFA
+                            </span>
+                          </div>
+                        </div>
+                      </ScrollAnimation>
                     </div>
-                  </ScrollAnimation>
+                  )}
                 </div>
               </div>
             </ScrollAnimation>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, CreditCard, Truck, Calendar, MapPin, Clock, AlertCircle, Smartphone, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CreditCard, Truck, Calendar, MapPin, Clock, AlertCircle, Smartphone, CheckCircle, QrCode, Copy } from 'lucide-react';
 import Button from '../components/UI/Button';
+import QRCodeGenerator from '../components/QRCode/QRCodeGenerator';
 import { useCart } from '../contexts/CartContext';
 import { useFirebase } from '../contexts/FirebaseContext';
 import { DeliveryOption, CustomerInfo } from '../types';
@@ -15,8 +16,10 @@ const Checkout: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'mobile_money'>('cash');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState<any>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showMobileMoneyInfo, setShowMobileMoneyInfo] = useState(false);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     firstName: userProfile?.firstName || '',
     lastName: userProfile?.lastName || '',
@@ -66,7 +69,7 @@ const Checkout: React.FC = () => {
   }
 
   // Zones de livraison gratuite
-  const freeShippingZones = ['UAC (Abomey-Calavi)'];
+  const freeShippingZones = ['Cococodji', 'Hêvié', 'Pahou', 'Calavi'];
 
   const deliveryOptions: DeliveryOption[] = [
     {
@@ -179,6 +182,10 @@ const Checkout: React.FC = () => {
     return true;
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
   const handleSubmitOrder = async () => {
     if (!validateForm() || isSubmitting) return;
 
@@ -196,12 +203,12 @@ const Checkout: React.FC = () => {
         itemsCount: items.length
       });
 
-      const orderId = await createOrder({
+      const orderData = {
         total: finalTotal,
         deliveryPrice: finalDeliveryPrice,
         paymentMethod,
         customerInfo,
-        status: 'pending',
+        status: 'pending' as const,
         items: items.map(item => ({
           id: item.product.id,
           name: item.product.name,
@@ -209,17 +216,22 @@ const Checkout: React.FC = () => {
           price: item.product.price * 655,
           quantity: item.quantity
         }))
-      });
+      };
+
+      const orderId = await createOrder(orderData);
 
       console.log('✅ Order created successfully:', orderId);
+      
+      // Stocker les données de la commande pour le QR code
+      setCompletedOrder({
+        id: orderId,
+        ...orderData,
+        createdAt: new Date()
+      });
+      
       clearCart();
       setShowSuccessPopup(true);
       
-      // Rediriger vers le profil après 3 secondes
-      setTimeout(() => {
-        setShowSuccessPopup(false);
-        window.location.href = '/profile?tab=orders';
-      }, 3000);
     } catch (error) {
       console.error('❌ Error creating order:', error);
       alert('Erreur lors de la création de la commande: ' + (error as Error).message);
@@ -247,18 +259,16 @@ const Checkout: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* Header */}
-        <div className="flex items-center space-x-4 mb-6 sm:mb-8">
-          <Link
-            to="/cart"
-            className="inline-flex items-center space-x-2 text-emerald-600 hover:text-emerald-700"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Retour au panier</span>
-          </Link>
-          
-          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Commande</h1>
-        </div>
+        {/* Back Button */}
+        <Link
+          to="/cart"
+          className="inline-flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 mb-8"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Retour au panier</span>
+        </Link>
+
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-8">Commande</h1>
 
         {/* Steps Indicator */}
         <div className="flex items-center justify-center mb-6 sm:mb-8 overflow-x-auto">
@@ -574,7 +584,10 @@ const Checkout: React.FC = () => {
                     className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
                       paymentMethod === 'mobile_money' ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300'
                     }`}
-                    onClick={() => setPaymentMethod('mobile_money')}
+                    onClick={() => {
+                      setPaymentMethod('mobile_money');
+                      setShowMobileMoneyInfo(true);
+                    }}
                   >
                     <div className="flex items-center space-x-3">
                       <Smartphone className="h-5 w-5 text-emerald-600" />
@@ -586,6 +599,36 @@ const Checkout: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Mobile Money Instructions */}
+                {paymentMethod === 'mobile_money' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div className="flex items-start space-x-3">
+                      <Smartphone className="h-5 w-5 text-blue-600 mt-0.5" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-blue-900 mb-2">Instructions Mobile Money</h3>
+                        <div className="space-y-2 text-sm text-blue-800">
+                          <p><strong>1.</strong> Effectuez le dépôt sur le numéro :</p>
+                          <div className="bg-white rounded-lg p-3 border border-blue-200">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-lg text-blue-900">52 35 34 84</span>
+                              <button
+                                onClick={() => copyToClipboard('52353484')}
+                                className="flex items-center space-x-1 text-blue-600 hover:text-blue-700"
+                              >
+                                <Copy className="h-4 w-4" />
+                                <span className="text-xs">Copier</span>
+                              </button>
+                            </div>
+                          </div>
+                          <p><strong>2.</strong> Montant à déposer : <span className="font-bold">{finalTotal.toLocaleString('fr-FR')} FCFA</span></p>
+                          <p><strong>3.</strong> Gardez le reçu de transaction</p>
+                          <p><strong>4.</strong> Confirmez votre commande ci-dessous</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
                   <div className="flex items-start space-x-3">
                     <AlertCircle className="h-5 w-5 text-orange-600 mt-0.5" />
@@ -594,7 +637,7 @@ const Checkout: React.FC = () => {
                       <p className="text-sm text-orange-800">
                         {paymentMethod === 'cash' 
                           ? 'Préparez le montant exact de votre commande pour faciliter la livraison.'
-                          : 'Vous recevrez les instructions de paiement mobile money après confirmation.'
+                          : 'Effectuez le dépôt Mobile Money avant de confirmer votre commande. Votre commande sera validée après vérification du paiement.'
                         }
                       </p>
                     </div>
@@ -648,6 +691,12 @@ const Checkout: React.FC = () => {
                           }
                         </span>
                       </div>
+                      {paymentMethod === 'mobile_money' && (
+                        <div className="flex justify-between">
+                          <span>Numéro de dépôt:</span>
+                          <span className="font-bold">52 35 34 84</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -724,18 +773,65 @@ const Checkout: React.FC = () => {
           </div>
         </div>
 
-        {/* Success Popup */}
-        {showSuccessPopup && (
+        {/* Success Popup with QR Code */}
+        {showSuccessPopup && completedOrder && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 text-center max-w-md w-full animate-slide-up">
-              <CheckCircle className="h-16 w-16 text-emerald-600 mx-auto mb-4" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                Commande confirmée !
-              </h2>
-              <p className="text-gray-600 mb-4">
-                Votre commande a été bien effectuée. Vous allez être redirigé vers vos commandes.
-              </p>
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto"></div>
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-slide-up">
+              <div className="p-6 sm:p-8 text-center">
+                <CheckCircle className="h-16 w-16 text-emerald-600 mx-auto mb-4" />
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  Commande confirmée !
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Votre commande #{completedOrder.id} a été créée avec succès.
+                </p>
+
+                {/* Mobile Money Instructions in popup */}
+                {paymentMethod === 'mobile_money' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left">
+                    <h3 className="font-semibold text-blue-900 mb-2">📱 Finaliser le paiement Mobile Money</h3>
+                    <div className="space-y-2 text-sm text-blue-800">
+                      <p>Effectuez maintenant le dépôt sur :</p>
+                      <div className="bg-white rounded-lg p-3 border border-blue-200 text-center">
+                        <span className="font-bold text-xl text-blue-900">52 35 34 84</span>
+                      </div>
+                      <p>Montant : <span className="font-bold">{completedOrder.total.toLocaleString('fr-FR')} FCFA</span></p>
+                      <p className="text-blue-600">⚠️ Votre commande sera validée après vérification du paiement</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* QR Code */}
+                <QRCodeGenerator 
+                  orderId={completedOrder.id}
+                  orderData={completedOrder}
+                  className="mb-6"
+                />
+
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                  <Button
+                    onClick={() => {
+                      setShowSuccessPopup(false);
+                      window.location.href = '/profile?tab=orders';
+                    }}
+                    size="lg"
+                    className="flex-1"
+                  >
+                    Voir mes commandes
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowSuccessPopup(false);
+                      window.location.href = '/shop';
+                    }}
+                    size="lg"
+                    className="flex-1"
+                  >
+                    Continuer les achats
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         )}

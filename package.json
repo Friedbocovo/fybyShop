@@ -11,9 +11,13 @@
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
+    "@types/qrcode": "^1.5.5",
     "contentful": "^11.7.5",
+    "emailjs-com": "^3.2.0",
     "firebase": "^10.7.1",
     "lucide-react": "^0.344.0",
+    "qr-scanner": "^1.4.2",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-awesome-reveal": "^4.3.1",
     "react-dom": "^18.3.1",

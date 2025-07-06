@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FriedShop Admin - Scanner QR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
+    <style>
+        .scanner-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        #qr-video {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 3px solid #10b981;
+            border-radius: 12px;
+            pointer-events: none;
+        }
+        
+        .scanner-overlay::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="flex items-center justify-center space-x-3">
+                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold">FriedShop Admin</h1>
+                    <p class="text-emerald-100 text-sm">Scanner de commandes QR</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Scanner Section -->
+        <div class="card p-6 mb-8">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Scanner QR Code</h2>
+                <p class="text-gray-600">Scannez le QR code d'une commande pour la valider</p>
+            </div>
+
+            <!-- Camera Controls -->
+            <div class="flex justify-center space-x-4 mb-6">
+                <button id="start-scan" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                    🎥 Démarrer le scanner
+                </button>
+                <button id="stop-scan" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold" style="display: none;">
+                    ⏹️ Arrêter le scanner
+                </button>
+            </div>
+
+            <!-- Scanner Container -->
+            <div class="scanner-container" id="scanner-container" style="display: none;">
+                <video id="qr-video"></video>
+                <div class="scanner-overlay"></div>
+            </div>
+
+            <!-- Status -->
+            <div id="scan-status" class="text-center mt-4 text-gray-600">
+                Cliquez sur "Démarrer le scanner" pour commencer
+            </div>
+        </div>
+
+        <!-- Order Details Section -->
+        <div id="order-details" class="card p-6" style="display: none;">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">📦 Détails de la commande</h3>
+            <div id="order-content"></div>
+            
+            <div class="flex space-x-4 mt-6">
+                <button id="validate-order" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold flex-1">
+                    ✅ Valider la commande
+                </button>
+                <button id="reject-order" class="btn-danger text-white px-8 py-3 rounded-lg font-semibold flex-1">
+                    ❌ Rejeter la commande
+                </button>
+                <button id="clear-order" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold">
+                    🔄 Nouveau scan
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="card p-6 mt-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">📋 Commandes récentes</h3>
+            <div id="recent-orders" class="space-y-3">
+                <p class="text-gray-600 text-center py-8">Aucune commande traitée aujourd'hui</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script type="module">
+        // Configuration Firebase (remplacez par vos vraies clés)
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            // Remplacez par votre configuration Firebase
+            apiKey: "AIzaSyB0W7cPNemaYdIRCmwbV5H6CdtcWsosces",
+            authDomain: "friedshop-bdca5.firebaseapp.com",
+            projectId: "friedshop-bdca5",
+            storageBucket: "friedshop-bdca5.firebasestorage.app",
+            messagingSenderId: "1076611256538",
+            appId: "1076611256538:web:711d8cabf1cd37abd355e3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables globales
+        let qrScanner = null;
+        let currentOrder = null;
+        let recentOrders = JSON.parse(localStorage.getItem('recentOrders') || '[]');
+
+        // Éléments DOM
+        const startScanBtn = document.getElementById('start-scan');
+        const stopScanBtn = document.getElementById('stop-scan');
+        const scannerContainer = document.getElementById('scanner-container');
+        const scanStatus = document.getElementById('scan-status');
+        const orderDetails = document.getElementById('order-details');
+        const orderContent = document.getElementById('order-content');
+        const validateBtn = document.getElementById('validate-order');
+        const rejectBtn = document.getElementById('reject-order');
+        const clearBtn = document.getElementById('clear-order');
+        const recentOrdersContainer = document.getElementById('recent-orders');
+
+        // Initialiser l'affichage des commandes récentes
+        displayRecentOrders();
+
+        // Event Listeners
+        startScanBtn.addEventListener('click', startScanning);
+        stopScanBtn.addEventListener('click', stopScanning);
+        validateBtn.addEventListener('click', validateOrder);
+        rejectBtn.addEventListener('click', rejectOrder);
+        clearBtn.addEventListener('click', clearOrder);
+
+        async function startScanning() {
+            try {
+                scanStatus.textContent = '🔄 Initialisation de la caméra...';
+                
+                const videoElem = document.getElementById('qr-video');
+                qrScanner = new QrScanner(
+                    videoElem,
+                    result => handleScanResult(result),
+                    {
+                        onDecodeError: error => {
+                            // Ignorer les erreurs de décodage normales
+                        },
+                        highlightScanRegion: true,
+                        highlightCodeOutline: true,
+                    }
+                );
+
+                await qrScanner.start();
+                
+                startScanBtn.style.display = 'none';
+                stopScanBtn.style.display = 'inline-block';
+                scannerContainer.style.display = 'block';
+                scanStatus.textContent = '📱 Pointez la caméra vers un QR code de commande';
+                
+            } catch (error) {
+                console.error('Erreur lors du démarrage du scanner:', error);
+                scanStatus.textContent = '❌ Erreur: Impossible d\'accéder à la caméra';
+            }
+        }
+
+        function stopScanning() {
+            if (qrScanner) {
+                qrScanner.stop();
+                qrScanner.destroy();
+                qrScanner = null;
+            }
+            
+            startScanBtn.style.display = 'inline-block';
+            stopScanBtn.style.display = 'none';
+            scannerContainer.style.display = 'none';
+            scanStatus.textContent = 'Scanner arrêté';
+        }
+
+        function handleScanResult(result) {
+            try {
+                const orderData = JSON.parse(result.data);
+                
+                // Vérifier que c'est bien un QR code de commande FriedShop
+                if (!orderData.orderId || !orderData.customerName) {
+                    scanStatus.textContent = '⚠️ QR code non valide (pas une commande FriedShop)';
+                    return;
+                }
+
+                currentOrder = orderData;
+                displayOrderDetails(orderData);
+                stopScanning();
+                
+            } catch (error) {
+                scanStatus.textContent = '⚠️ QR code non valide (format incorrect)';
+                console.error('Erreur de parsing:', error);
+            }
+        }
+
+        function displayOrderDetails(order) {
+            const deliveryInfo = order.deliveryType === 'delivery' && order.address 
+                ? `📍 ${order.address.street}, ${order.address.city}, ${order.address.country}`
+                : '🏪 Retrait en magasin';
+
+            const statusColor = {
+                'pending': 'bg-yellow-100 text-yellow-800',
+                'confirmed': 'bg-blue-100 text-blue-800',
+                'shipped': 'bg-purple-100 text-purple-800',
+                'delivered': 'bg-green-100 text-green-800',
+                'cancelled': 'bg-red-100 text-red-800'
+            };
+
+            const statusText = {
+                'pending': 'En attente',
+                'confirmed': 'Confirmée',
+                'shipped': 'Expédiée',
+                'delivered': 'Livrée',
+                'cancelled': 'Annulée'
+            };
+
+            orderContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">👤 Informations client</h4>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Nom:</strong> ${order.customerName}</p>
+                            <p><strong>Téléphone:</strong> ${order.customerPhone}</p>
+                            <p><strong>Livraison:</strong> ${deliveryInfo}</p>
+                            <p><strong>Paiement:</strong> ${order.paymentMethod === 'cash' ? '💵 À la livraison' : '📱 Mobile Money'}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">📦 Détails commande</h4>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>ID:</strong> #${order.orderId}</p>
+                            <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
+                            <p><strong>Total:</strong> <span class="font-bold text-emerald-600">${order.total.toLocaleString('fr-FR')} FCFA</span></p>
+                            <p><strong>Statut:</strong> <span class="px-2 py-1 rounded-full text-xs ${statusColor[order.status] || 'bg-gray-100 text-gray-800'}">${statusText[order.status] || order.status}</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-semibold text-gray-900 mb-3">🛍️ Articles commandés</h4>
+                    <div class="space-y-2">
+                        ${order.items.map(item => `
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-medium">${item.name}</span>
+                                <span class="text-sm text-gray-600">
+                                    ${item.quantity} × ${item.price.toLocaleString('fr-FR')} FCFA = 
+                                    <strong>${(item.quantity * item.price).toLocaleString('fr-FR')} FCFA</strong>
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            orderDetails.style.display = 'block';
+            scanStatus.textContent = '✅ QR code scanné avec succès !';
+        }
+
+        async function validateOrder() {
+            if (!currentOrder) return;
+
+            try {
+                validateBtn.disabled = true;
+                validateBtn.textContent = '⏳ Validation en cours...';
+
+                // Mettre à jour le statut dans Firebase
+                const orderRef = doc(db, 'orders', currentOrder.orderId);
+                await updateDoc(orderRef, {
+                    status: 'confirmed',
+                    updatedAt: serverTimestamp(),
+                    validatedBy: 'admin',
+                    validatedAt: serverTimestamp()
+                });
+
+                // Ajouter à l'historique local
+                const processedOrder = {
+                    ...currentOrder,
+                    action: 'validated',
+                    processedAt: new Date().toISOString(),
+                    processedBy: 'admin'
+                };
+
+                recentOrders.unshift(processedOrder);
+                recentOrders = recentOrders.slice(0, 10); // Garder seulement les 10 dernières
+                localStorage.setItem('recentOrders', JSON.stringify(recentOrders));
+
+                // Afficher le succès
+                showSuccess('✅ Commande validée avec succès !');
+                displayRecentOrders();
+                clearOrder();
+
+            } catch (error) {
+                console.error('Erreur lors de la validation:', error);
+                showError('❌ Erreur lors de la validation de la commande');
+                validateBtn.disabled = false;
+                validateBtn.textContent = '✅ Valider la commande';
+            }
+        }
+
+        async function rejectOrder() {
+            if (!currentOrder) return;
+
+            const reason = prompt('Raison du rejet (optionnel):') || 'Rejetée par l\'admin';
+
+            try {
+                rejectBtn.disabled = true;
+                rejectBtn.textContent = '⏳ Rejet en cours...';
+
+                // Mettre à jour le statut dans Firebase
+                const orderRef = doc(db, 'orders', currentOrder.orderId);
+                await updateDoc(orderRef, {
+                    status: 'cancelled',
+                    updatedAt: serverTimestamp(),
+                    rejectedBy: 'admin',
+                    rejectedAt: serverTimestamp(),
+                    rejectionReason: reason
+                });
+
+                // Ajouter à l'historique local
+                const processedOrder = {
+                    ...currentOrder,
+                    action: 'rejected',
+                    reason: reason,
+                    processedAt: new Date().toISOString(),
+                    processedBy: 'admin'
+                };
+
+                recentOrders.unshift(processedOrder);
+                recentOrders = recentOrders.slice(0, 10);
+                localStorage.setItem('recentOrders', JSON.stringify(recentOrders));
+
+                // Afficher le succès
+                showSuccess('❌ Commande rejetée');
+                displayRecentOrders();
+                clearOrder();
+
+            } catch (error) {
+                console.error('Erreur lors du rejet:', error);
+                showError('❌ Erreur lors du rejet de la commande');
+                rejectBtn.disabled = false;
+                rejectBtn.textContent = '❌ Rejeter la commande';
+            }
+        }
+
+        function clearOrder() {
+            currentOrder = null;
+            orderDetails.style.display = 'none';
+            scanStatus.textContent = 'Prêt pour un nouveau scan';
+            validateBtn.disabled = false;
+            validateBtn.textContent = '✅ Valider la commande';
+            rejectBtn.disabled = false;
+            rejectBtn.textContent = '❌ Rejeter la commande';
+        }
+
+        function displayRecentOrders() {
+            if (recentOrders.length === 0) {
+                recentOrdersContainer.innerHTML = '<p class="text-gray-600 text-center py-8">Aucune commande traitée aujourd\'hui</p>';
+                return;
+            }
+
+            recentOrdersContainer.innerHTML = recentOrders.map(order => {
+                const actionColor = order.action === 'validated' ? 'text-green-600' : 'text-red-600';
+                const actionIcon = order.action === 'validated' ? '✅' : '❌';
+                const actionText = order.action === 'validated' ? 'Validée' : 'Rejetée';
+
+                return `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-lg">${actionIcon}</span>
+                                <div>
+                                    <p class="font-semibold text-gray-900">#${order.orderId}</p>
+                                    <p class="text-sm text-gray-600">${order.customerName} • ${order.total.toLocaleString('fr-FR')} FCFA</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold ${actionColor}">${actionText}</p>
+                            <p class="text-xs text-gray-500">${new Date(order.processedAt).toLocaleTimeString('fr-FR')}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showSuccess(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function showError(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Exposer les fonctions globalement pour le debugging
+        window.adminApp = {
+            startScanning,
+            stopScanning,
+            validateOrder,
+            rejectOrder,
+            clearOrder
+        };
+    </script>
+</body>
+</html>
