@@ -22,12 +22,12 @@ const favoritesReducer = (state: FavoritesState, action: FavoritesAction): Favor
   switch (action.type) {
     case 'ADD_FAVORITE':
       const newFavorites = [...state.favorites, action.payload];
-      localStorage.setItem('friedshop_favorites', JSON.stringify(newFavorites));
+      localStorage.setItem('fybyShop_favorites', JSON.stringify(newFavorites));
       return { ...state, favorites: newFavorites };
     
     case 'REMOVE_FAVORITE':
       const filteredFavorites = state.favorites.filter(product => product.id !== action.payload);
-      localStorage.setItem('friedshop_favorites', JSON.stringify(filteredFavorites));
+      localStorage.setItem('fybyShop_favorites', JSON.stringify(filteredFavorites));
       return { ...state, favorites: filteredFavorites };
     
     case 'LOAD_FAVORITES':
@@ -42,7 +42,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [state, dispatch] = useReducer(favoritesReducer, { favorites: [] });
 
   React.useEffect(() => {
-    const savedFavorites = localStorage.getItem('friedshop_favorites');
+    const savedFavorites = localStorage.getItem('fybyShop_favorites');
     if (savedFavorites) {
       try {
         const favorites = JSON.parse(savedFavorites);

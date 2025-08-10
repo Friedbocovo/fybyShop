@@ -187,11 +187,11 @@ const ProductDetail: React.FC = () => {
             {/* Price */}
             <div className="flex items-center space-x-4">
               <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                {(product.price * 655).toLocaleString('fr-FR')} FCFA
+                {(product.price ).toLocaleString('fr-FR')} FCFA
               </span>
               {product.originalPrice && (
                 <span className="text-xl text-gray-500 line-through">
-                  {(product.originalPrice * 655).toLocaleString('fr-FR')} FCFA
+                  {(product.originalPrice ).toLocaleString('fr-FR')} FCFA
                 </span>
               )}
             </div>

@@ -18,9 +18,9 @@ const Warranty: React.FC = () => {
       textColor: 'text-blue-700'
     },
     {
-      title: 'Garantie Étendue FriedShop',
+      title: 'Garantie Étendue fybyShop',
       duration: 'Jusqu\'à 3 ans',
-      description: 'Protection supplémentaire offerte par FriedShop',
+      description: 'Protection supplémentaire offerte par fybyShop',
       coverage: [
         'Extension de la garantie constructeur',
         'Support technique prioritaire',
@@ -261,7 +261,7 @@ const Warranty: React.FC = () => {
             <div className="bg-white/10 rounded-xl p-6">
               <Mail className="h-8 w-8 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Support email</h3>
-              <p className="text-primary-100 mb-2">support@friedshop.fr</p>
+              <p className="text-primary-100 mb-2">support@fybyShop.fr</p>
               <p className="text-sm text-primary-200">Réponse sous 4h ouvrées</p>
             </div>
           </div>

@@ -89,13 +89,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Vérifier si l'utilisateur est connecté au chargement
   useEffect(() => {
-    const savedUser = localStorage.getItem('friedshop_user');
+    const savedUser = localStorage.getItem('fybyShop_user');
     if (savedUser) {
       try {
         const user = JSON.parse(savedUser);
         dispatch({ type: 'LOGIN_SUCCESS', payload: user });
       } catch (error) {
-        localStorage.removeItem('friedshop_user');
+        localStorage.removeItem('fybyShop_user');
       }
     }
   }, []);
@@ -107,12 +107,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Utilisateur de test
-    if (email === 'test@friedshop.fr' && password === 'password') {
+    if (email === 'test@fybyShop.fr' && password === 'password') {
       const user: User = {
         id: '1',
         firstName: 'Jean',
         lastName: 'Dupont',
-        email: 'test@friedshop.fr',
+        email: 'test@fybyShop.fr',
         phone: '+229 97 12 34 56',
         avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400',
         address: {
@@ -128,7 +128,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
       };
       
-      localStorage.setItem('friedshop_user', JSON.stringify(user));
+      localStorage.setItem('fybyShop_user', JSON.stringify(user));
       dispatch({ type: 'LOGIN_SUCCESS', payload: user });
       return true;
     }
@@ -156,20 +156,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     };
     
-    localStorage.setItem('friedshop_user', JSON.stringify(user));
+    localStorage.setItem('fybyShop_user', JSON.stringify(user));
     dispatch({ type: 'LOGIN_SUCCESS', payload: user });
     return true;
   };
 
   const logout = () => {
-    localStorage.removeItem('friedshop_user');
+    localStorage.removeItem('fybyShop_user');
     dispatch({ type: 'LOGOUT' });
   };
 
   const updateUser = (userData: Partial<User>) => {
     if (state.user) {
       const updatedUser = { ...state.user, ...userData };
-      localStorage.setItem('friedshop_user', JSON.stringify(updatedUser));
+      localStorage.setItem('fybyShop_user', JSON.stringify(updatedUser));
       dispatch({ type: 'UPDATE_USER', payload: userData });
     }
   };

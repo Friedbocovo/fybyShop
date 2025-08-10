@@ -70,7 +70,7 @@ const Cart: React.FC = () => {
                     </Link>
                     <p className="text-sm text-gray-500 mt-1">{item.product.brand}</p>
                     <p className="text-lg font-bold text-gray-900 mt-2">
-                      {item.product.price.toLocaleString('fr-FR')} €
+                      {item.product.price.toLocaleString('fr-FR')} FCFA
                     </p>
                   </div>
 
@@ -99,7 +99,7 @@ const Cart: React.FC = () => {
                   {/* Total Price */}
                   <div className="text-right">
                     <p className="text-lg font-bold text-gray-900">
-                      {(item.product.price * item.quantity).toLocaleString('fr-FR')} €
+                      {(item.product.price * item.quantity).toLocaleString('fr-FR')} FCFA
                     </p>
                   </div>
 
@@ -126,7 +126,7 @@ const Cart: React.FC = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-600">
                   <span>Sous-total</span>
-                  <span>{total.toLocaleString('fr-FR')} €</span>
+                  <span>{total.toLocaleString('fr-FR')} FCFA</span>
                 </div>
                 
                 <div className="flex justify-between text-gray-600">
@@ -137,7 +137,7 @@ const Cart: React.FC = () => {
                 <div className="border-t border-gray-200 pt-3">
                   <div className="flex justify-between text-lg font-bold text-gray-900">
                     <span>Total</span>
-                    <span>{total.toLocaleString('fr-FR')} €</span>
+                    <span>{total.toLocaleString('fr-FR')} FCFA</span>
                   </div>
                 </div>
               </div>
@@ -146,10 +146,6 @@ const Cart: React.FC = () => {
                 <Link to="/checkout">Passer la commande</Link>
               </Button>
               
-              <div className="text-center text-sm text-gray-500">
-                <p>Paiement sécurisé</p>
-                <p>Livraison gratuite dès 50€</p>
-              </div>
             </div>
           </div>
         </div>

@@ -37,7 +37,7 @@ const About: React.FC = () => {
           <div className="text-center">
            <Rotate direction="top-left" cascade>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-slide-up">
-              À propos de FriedShop
+              À propos de fybyShop
             </h1>
             
             <p className="text-xl md:text-2xl text-primary-100 max-w-3xl mx-auto leading-relaxed animate-slide-up" 
@@ -87,7 +87,7 @@ const About: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-slide-up">
          <Rotate direction="top-left" cascade>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Rejoignez l'aventure FriedShop
+            Rejoignez l'aventure fybyShop
           </h2>
           <p className="text-xl mb-8 text-primary-100">
             Découvrez pourquoi des milliers de clients nous font confiance pour leurs achats tech

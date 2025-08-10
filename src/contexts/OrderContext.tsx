@@ -50,7 +50,7 @@ const orderReducer = (state: OrderState, action: OrderAction): OrderState => {
   switch (action.type) {
     case 'ADD_ORDER':
       const newOrders = [...state.orders, action.payload];
-      localStorage.setItem('friedshop_orders', JSON.stringify(newOrders));
+      localStorage.setItem('fybyShop_orders', JSON.stringify(newOrders));
       return { ...state, orders: newOrders };
     
     case 'UPDATE_ORDER_STATUS':
@@ -59,7 +59,7 @@ const orderReducer = (state: OrderState, action: OrderAction): OrderState => {
           ? { ...order, status: action.payload.status }
           : order
       );
-      localStorage.setItem('friedshop_orders', JSON.stringify(updatedOrders));
+      localStorage.setItem('fybyShop_orders', JSON.stringify(updatedOrders));
       return { ...state, orders: updatedOrders };
     
     case 'LOAD_ORDERS':
@@ -74,7 +74,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [state, dispatch] = useReducer(orderReducer, { orders: [] });
 
   React.useEffect(() => {
-    const savedOrders = localStorage.getItem('friedshop_orders');
+    const savedOrders = localStorage.getItem('fybyShop_orders');
     if (savedOrders) {
       try {
         const orders = JSON.parse(savedOrders);
@@ -124,7 +124,7 @@ ${order.customerInfo.address.country}`;
 Adresse du magasin: 123 Avenue des Champs-Élysées, 75008 Paris`;
     }
 
-    const message = `🛒 *Nouvelle commande FriedShop*
+    const message = `🛒 *Nouvelle commande fybyShop*
 
 #${order.customerInfo.firstName}${order.customerInfo.lastName}#
 

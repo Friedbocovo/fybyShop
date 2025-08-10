@@ -66,7 +66,6 @@ function App() {
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/shipping" element={<Shipping />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
-                        <Route path="/legal" element={<LegalNotice />} />
                       </Routes>
                     </PageWrapper>
                   </main>

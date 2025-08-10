@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { ShoppingCart, Mail, Phone, MapPin, Facebook, Twitter, TikTok, Instagram, Youtube } from 'lucide-react';
 import { Fade, Slide, Bounce, Zoom, Flip, Rotate, Roll, JackInTheBox, Hinge } from "react-awesome-reveal";
 
 const Footer: React.FC = () => {
@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
               Votre destination premium pour l'électronique de pointe. 
               Découvrez les dernières innovations technologiques avec 
               un service client exceptionnel.
-            </p>
+            </p>{/*
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
                 <Facebook className="h-5 w-5" />
@@ -30,12 +30,12 @@ const Footer: React.FC = () => {
                 <Twitter className="h-5 w-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                <Instagram className="h-5 w-5" />
+                <Tiktok className="h-5 w-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
                 <Youtube className="h-5 w-5" />
               </a>
-            </div>
+            </div>*/}
           </div>
 
           {/* Navigation */}
@@ -93,17 +93,17 @@ const Footer: React.FC = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-primary-400" />
-                <span className="text-gray-400">+229 97 12 34 56</span>
+                <span className="text-gray-400">+229 52 35 34 84</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-primary-400" />
-                <span className="text-gray-400">contact@friedshop.fr</span>
+                <span className="text-gray-400">friedshop00@gmail.com</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-primary-400 mt-0.5" />
                 <span className="text-gray-400">
-                  123 Avenue des Champs-Élysées<br />
-                  75008 Paris, France
+                  Tankpè,Fifonsi<br />
+                  Abomey Calavi, Benin
                 </span>
               </div>
             </div>

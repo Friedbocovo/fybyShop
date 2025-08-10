@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Settings, Package, Heart, MapPin, Phone, Mail, Edit3, Save, X, Eye, EyeOff, CreditCard, Bell, Shield, LogOut, Calendar, Star, Truck, Lock, Check, QrCode, Download } from 'lucide-react';
+import { Fade, Slide, Bounce, Zoom, Flip, Rotate, Roll, JackInTheBox, Hinge } from "react-awesome-reveal";
 import { Link } from 'react-router-dom';
 import Button from '../components/UI/Button';
 import ProductCard from '../components/UI/ProductCard';
@@ -74,8 +75,8 @@ const Profile: React.FC = () => {
               <p className="text-gray-600 mb-8">
                 Vous devez vous connecter pour accéder à votre profil.
               </p>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 icon={LogOut}
                 onClick={() => setIsLoginModalOpen(true)}
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:scale-105 transition-transform duration-300"
@@ -85,9 +86,9 @@ const Profile: React.FC = () => {
             </div>
           </ScrollAnimation>
         </div>
-        <LoginModal 
-          isOpen={isLoginModalOpen} 
-          onClose={() => setIsLoginModalOpen(false)} 
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
         />
       </>
     );
@@ -201,6 +202,7 @@ const Profile: React.FC = () => {
         {/* Header */}
         <ScrollAnimation animation="fade-in-up">
           <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 hover-lift">
+                          <Fade direction="down" cascade>
             <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
               <div className="relative">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full flex items-center justify-center border-4 border-emerald-200 hover:scale-110 transition-transform duration-300">
@@ -208,53 +210,55 @@ const Profile: React.FC = () => {
                 </div>
                 <div className="absolute -bottom-1 -right-1 bg-green-500 w-6 h-6 rounded-full border-2 border-white animate-pulse"></div>
               </div>
-              
-              <div className="text-center sm:text-left flex-1">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                  {userProfile?.firstName || 'Utilisateur'} {userProfile?.lastName || ''}
-                </h1>
-                <p className="text-gray-600 mb-1 text-sm sm:text-base">
-                  {userProfile?.email || user?.email}
-                </p>
-                <p className="text-gray-600 text-sm sm:text-base">
-                  {userProfile?.phone || 'Téléphone non renseigné'}
-                </p>
-                {userProfile?.address && (
-                  <div className="flex items-center justify-center sm:justify-start space-x-2 mt-3">
-                    <MapPin className="h-4 w-4 text-emerald-600" />
-                    <span className="text-sm text-gray-600">
-                      {userProfile.address.city}, {userProfile.address.country}
-                    </span>
-                  </div>
-                )}
-              </div>
+                <div className="text-center sm:text-left flex-1">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                    {userProfile?.firstName || 'Utilisateur'} {userProfile?.lastName || ''}
+                  </h1>
+                  <p className="text-gray-600 mb-1 text-sm sm:text-base">
+                    {userProfile?.email || user?.email}
+                  </p>
+                  <p className="text-gray-600 text-sm sm:text-base">
+                    {userProfile?.phone || 'Téléphone non renseigné'}
+                  </p>
+                  {userProfile?.address && (
+                    <div className="flex items-center justify-center sm:justify-start space-x-2 mt-3">
+                      <MapPin className="h-4 w-4 text-emerald-600" />
+                      <span className="text-sm text-gray-600">
+                        {userProfile.address.city}, {userProfile.address.country}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
               <div className="flex flex-col space-y-2 w-full sm:w-auto">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   icon={Edit3}
                   onClick={() => setIsEditing(true)}
                   className="w-full sm:w-auto hover:scale-105 transition-transform duration-200"
                 >
                   Modifier le profil
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  icon={LogOut} 
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon={LogOut}
                   className="text-red-600 border-red-300 hover:bg-red-50 w-full sm:w-auto hover:scale-105 transition-transform duration-200"
                   onClick={logout}
                 >
                   Déconnexion
                 </Button>
               </div>
-            </div>
+             
+            </div> </Fade>
+            
           </div>
         </ScrollAnimation>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
           {/* Sidebar Navigation */}
+          <Fade direction='left' cascade>
           <div className="lg:col-span-1">
             <ScrollAnimation animation="fade-in-left">
               <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 sticky top-24 hover-lift">
@@ -263,11 +267,10 @@ const Profile: React.FC = () => {
                     <ScrollAnimation key={tab.id} delay={index * 100}>
                       <button
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl transition-all duration-300 text-sm sm:text-base transform hover:scale-105 ${
-                          activeTab === tab.id
+                        className={`w-full flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl transition-all duration-300 text-sm sm:text-base transform hover:scale-105 ${activeTab === tab.id
                             ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg scale-105'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
-                        }`}
+                          }`}
                       >
                         <tab.icon className="h-5 w-5" />
                         <span className="font-medium">{tab.name}</span>
@@ -277,7 +280,7 @@ const Profile: React.FC = () => {
                 </nav>
               </div>
             </ScrollAnimation>
-          </div>
+          </div></Fade>
 
           {/* Main Content */}
           <div className="lg:col-span-3">
@@ -285,6 +288,7 @@ const Profile: React.FC = () => {
               <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 hover-lift">
                 {/* Profile Tab */}
                 {activeTab === 'profile' && (
+                  <Fade direction='right'>
                   <div>
                     <ScrollAnimation animation="fade-in-up">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
@@ -308,7 +312,7 @@ const Profile: React.FC = () => {
                           <input
                             type="text"
                             value={editData.firstName}
-                            onChange={(e) => setEditData({...editData, firstName: e.target.value})}
+                            onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
                             disabled={!isEditing}
                             required
                             className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -322,7 +326,7 @@ const Profile: React.FC = () => {
                           <input
                             type="text"
                             value={editData.lastName}
-                            onChange={(e) => setEditData({...editData, lastName: e.target.value})}
+                            onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
                             disabled={!isEditing}
                             required
                             className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -336,7 +340,7 @@ const Profile: React.FC = () => {
                           <input
                             type="email"
                             value={editData.email}
-                            onChange={(e) => setEditData({...editData, email: e.target.value})}
+                            onChange={(e) => setEditData({ ...editData, email: e.target.value })}
                             disabled={!isEditing}
                             required
                             className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -350,7 +354,7 @@ const Profile: React.FC = () => {
                           <input
                             type="tel"
                             value={editData.phone}
-                            onChange={(e) => setEditData({...editData, phone: e.target.value})}
+                            onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
                             disabled={!isEditing}
                             required
                             className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -364,7 +368,7 @@ const Profile: React.FC = () => {
                           <input
                             type="text"
                             value={editData.street}
-                            onChange={(e) => setEditData({...editData, street: e.target.value})}
+                            onChange={(e) => setEditData({ ...editData, street: e.target.value })}
                             disabled={!isEditing}
                             placeholder="Rue"
                             className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 mb-3 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -373,7 +377,7 @@ const Profile: React.FC = () => {
                             <input
                               type="text"
                               value={editData.city}
-                              onChange={(e) => setEditData({...editData, city: e.target.value})}
+                              onChange={(e) => setEditData({ ...editData, city: e.target.value })}
                               placeholder="Ville"
                               disabled={!isEditing}
                               className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -381,7 +385,7 @@ const Profile: React.FC = () => {
                             <input
                               type="text"
                               value={editData.country}
-                              onChange={(e) => setEditData({...editData, country: e.target.value})}
+                              onChange={(e) => setEditData({ ...editData, country: e.target.value })}
                               placeholder="Pays"
                               disabled={!isEditing}
                               className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50 text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
@@ -390,16 +394,17 @@ const Profile: React.FC = () => {
                         </div>
                       </ScrollAnimation>
                     </div>
-                  </div>
+                  </div></Fade>
                 )}
 
                 {/* Orders Tab */}
                 {activeTab === 'orders' && (
+                  <Fade direction='down'>
                   <div>
                     <ScrollAnimation animation="fade-in-up">
                       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Mes commandes</h2>
                     </ScrollAnimation>
-                    
+
                     {orders.length === 0 ? (
                       <ScrollAnimation animation="scale-in">
                         <div className="text-center py-12">
@@ -432,7 +437,7 @@ const Profile: React.FC = () => {
                                     </p>
                                   </div>
                                 </div>
-                                
+
                                 <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)} animate-pulse`}>
                                     {getStatusText(order.status)}
@@ -463,8 +468,8 @@ const Profile: React.FC = () => {
 
                               <div className="flex flex-col sm:flex-row justify-between mt-4 space-y-2 sm:space-y-0 sm:space-x-3">
                                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                                  <Button 
-                                    variant="outline" 
+                                  <Button
+                                    variant="outline"
                                     size="sm"
                                     onClick={() => setSelectedOrder(order)}
                                     className="w-full sm:w-auto hover:scale-105 transition-transform duration-200"
@@ -477,13 +482,13 @@ const Profile: React.FC = () => {
                                     </Button>
                                   )}
                                 </div>
-                                
+
                                 {/* QR Code Button */}
-                                <Button 
-                                  variant="outline" 
+                                <Button
+                                  variant="outline"
                                   size="sm"
                                   icon={QrCode}
-                                  onClick={() => setSelectedOrder({...order, showQR: true})}
+                                  onClick={() => setSelectedOrder({ ...order, showQR: true })}
                                   className="w-full sm:w-auto hover:scale-105 transition-transform duration-200 text-emerald-600 border-emerald-300 hover:bg-emerald-50"
                                 >
                                   QR Code
@@ -494,16 +499,17 @@ const Profile: React.FC = () => {
                         ))}
                       </div>
                     )}
-                  </div>
+                  </div></Fade>
                 )}
 
                 {/* Favorites Tab */}
                 {activeTab === 'favorites' && (
+                   <Fade direction='down'>
                   <div>
                     <ScrollAnimation animation="fade-in-up">
                       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Mes favoris</h2>
                     </ScrollAnimation>
-                    
+
                     {favorites.length === 0 ? (
                       <ScrollAnimation animation="scale-in">
                         <div className="text-center py-12">
@@ -530,16 +536,17 @@ const Profile: React.FC = () => {
                         ))}
                       </div>
                     )}
-                  </div>
+                  </div></Fade>
                 )}
 
                 {/* Settings Tab */}
                 {activeTab === 'settings' && (
+                  <Fade direction='down'>
                   <div>
                     <ScrollAnimation animation="fade-in-up">
                       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Paramètres</h2>
                     </ScrollAnimation>
-                    
+
                     <div className="space-y-8">
                       {/* Security */}
                       <ScrollAnimation animation="fade-in-up" delay={100}>
@@ -552,8 +559,8 @@ const Profile: React.FC = () => {
                             <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
                               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 space-y-2 sm:space-y-0">
                                 <p className="font-medium text-gray-900">Mot de passe</p>
-                                <Button 
-                                  variant="outline" 
+                                <Button
+                                  variant="outline"
                                   size="sm"
                                   onClick={() => setIsChangingPassword(!isChangingPassword)}
                                   className="hover:scale-105 transition-transform duration-200"
@@ -561,7 +568,7 @@ const Profile: React.FC = () => {
                                   {isChangingPassword ? 'Annuler' : 'Modifier'}
                                 </Button>
                               </div>
-                              
+
                               {!isChangingPassword ? (
                                 <div className="relative">
                                   <input
@@ -585,56 +592,56 @@ const Profile: React.FC = () => {
                                         {passwordError}
                                       </div>
                                     )}
-                                    
+
                                     {passwordSuccess && (
                                       <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-green-700 text-sm flex items-center">
                                         <Check className="h-4 w-4 mr-2" />
                                         Mot de passe modifié avec succès !
                                       </div>
                                     )}
-                                    
+
                                     <div>
                                       <label className="block text-sm font-medium text-gray-700 mb-2">Mot de passe actuel</label>
                                       <input
                                         type="password"
                                         value={passwordData.currentPassword}
-                                        onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                                         className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
                                         placeholder="Entrez votre mot de passe actuel"
                                       />
                                     </div>
-                                    
+
                                     <div>
                                       <label className="block text-sm font-medium text-gray-700 mb-2">Nouveau mot de passe</label>
                                       <input
                                         type="password"
                                         value={passwordData.newPassword}
-                                        onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                                         className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
                                         placeholder="Entrez votre nouveau mot de passe"
                                       />
                                     </div>
-                                    
+
                                     <div>
                                       <label className="block text-sm font-medium text-gray-700 mb-2">Confirmer le nouveau mot de passe</label>
                                       <input
                                         type="password"
                                         value={passwordData.confirmPassword}
-                                        onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                                         className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm sm:text-base transition-all duration-200 hover:border-emerald-300"
                                         placeholder="Confirmez votre nouveau mot de passe"
                                       />
                                     </div>
-                                    
+
                                     <div className="flex space-x-3">
-                                      <Button 
+                                      <Button
                                         onClick={handlePasswordChange}
                                         size="sm"
                                         className="hover:scale-105 transition-transform duration-200"
                                       >
                                         Changer le mot de passe
                                       </Button>
-                                      <Button 
+                                      <Button
                                         variant="outline"
                                         onClick={() => {
                                           setIsChangingPassword(false);
@@ -655,7 +662,7 @@ const Profile: React.FC = () => {
                         </div>
                       </ScrollAnimation>
                     </div>
-                  </div>
+                  </div></Fade>
                 )}
               </div>
             </ScrollAnimation>
@@ -666,6 +673,7 @@ const Profile: React.FC = () => {
         {selectedOrder && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <ScrollAnimation animation="scale-in">
+              <Fade direction='up'>
               <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                 <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
@@ -683,7 +691,7 @@ const Profile: React.FC = () => {
                   {selectedOrder.showQR ? (
                     // QR Code View
                     <div className="text-center">
-                      <QRCodeGenerator 
+                      <QRCodeGenerator
                         orderId={selectedOrder.id}
                         orderData={selectedOrder}
                         className="mb-6"
@@ -759,6 +767,7 @@ const Profile: React.FC = () => {
                   )}
                 </div>
               </div>
+              </Fade>
             </ScrollAnimation>
           </div>
         )}

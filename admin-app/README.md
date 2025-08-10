@@ -1,6 +1,6 @@
-# FriedShop Admin - Scanner QR
+# fybyShop Admin - Scanner QR
 
-Application admin pour scanner et valider les commandes FriedShop via QR codes.
+Application admin pour scanner et valider les commandes fybyShop via QR codes.
 
 ## 🚀 Fonctionnalités
 
@@ -137,7 +137,7 @@ Le QR code contient :
 
 ### QR code non reconnu
 - Vérifiez la qualité de l'image
-- Assurez-vous que c'est un QR FriedShop
+- Assurez-vous que c'est un QR fybyShop
 - Vérifiez la luminosité
 
 ### Erreur Firebase

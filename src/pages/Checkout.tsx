@@ -73,25 +73,9 @@ const Checkout: React.FC = () => {
 
   const deliveryOptions: DeliveryOption[] = [
     {
-      id: 'express-free',
-      type: 'delivery',
-      name: 'Livraison Express Gratuite',
-      description: 'Livraison en 24h dans les zones éligibles (Cococodji, Hêvié, Pahou, Calavi)',
-      price: 0,
-      estimatedTime: 'Demain avant 18h'
-    },
-    {
-      id: 'standard',
-      type: 'delivery',
-      name: 'Livraison Standard',
-      description: 'Livraison en 2-3 jours ouvrés (autres zones du Bénin)',
-      price: 2500,
-      estimatedTime: '2-3 jours ouvrés'
-    },
-    {
       id: 'pickup',
       type: 'pickup',
-      name: 'Retrait en magasin',
+      name: 'Retiré soit meme ',
       description: 'Prenez rendez-vous pour récupérer votre commande',
       price: 0,
       estimatedTime: 'Dès demain'
@@ -191,7 +175,7 @@ const Checkout: React.FC = () => {
 
     setIsSubmitting(true);
     const finalDeliveryPrice = getDeliveryPrice();
-    const finalTotal = (total * 655) + finalDeliveryPrice;
+    const finalTotal = (total ) + finalDeliveryPrice;
 
     try {
       console.log('🛒 Submitting order...');
@@ -213,7 +197,7 @@ const Checkout: React.FC = () => {
           id: item.product.id,
           name: item.product.name,
           image: item.product.image,
-          price: item.product.price * 655,
+          price: item.product.price ,
           quantity: item.quantity
         }))
       };
@@ -254,7 +238,7 @@ const Checkout: React.FC = () => {
   }
 
   const finalDeliveryPrice = getDeliveryPrice();
-  const finalTotal = (total * 655) + finalDeliveryPrice;
+  const finalTotal = (total ) + finalDeliveryPrice;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -298,10 +282,10 @@ const Checkout: React.FC = () => {
             {step === 1 && (
               <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                  Choisissez votre mode de livraison
+                  {/*Choisissez votre mode de livraison*/}
                 </h2>
                 
-                {/* Free Shipping Notice */}
+                {/* Free Shipping Notice 
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
                   <div className="flex items-start space-x-3">
                     <Truck className="h-5 w-5 text-emerald-600 mt-0.5" />
@@ -312,7 +296,7 @@ const Checkout: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div>*/}
                 
                 <div className="space-y-4">
                   {deliveryOptions.map((option) => (
@@ -494,7 +478,7 @@ const Checkout: React.FC = () => {
                           }`}>
                             {isInFreeShippingZone(customerInfo.address.city) 
                               ? '✓ Livraison gratuite disponible' 
-                              : '⚠ Frais de livraison : 2,500 FCFA'
+                              : '⚠ Frais de livraison : Au moins 2,500 FCFA'
                             }
                           </p>
                         )}
@@ -739,7 +723,7 @@ const Checkout: React.FC = () => {
                       {item.product.name} × {item.quantity}
                     </span>
                     <span className="text-gray-900">
-                      {(item.product.price * item.quantity * 655).toLocaleString('fr-FR')} FCFA
+                      {(item.product.price * item.quantity ).toLocaleString('fr-FR')} FCFA
                     </span>
                   </div>
                 ))}
@@ -748,7 +732,7 @@ const Checkout: React.FC = () => {
               <div className="border-t border-gray-200 pt-4 space-y-2">
                 <div className="flex justify-between text-gray-600">
                   <span>Sous-total</span>
-                  <span>{(total * 655).toLocaleString('fr-FR')} FCFA</span>
+                  <span>{(total ).toLocaleString('fr-FR')} FCFA</span>
                 </div>
                 
                 <div className="flex justify-between text-gray-600">

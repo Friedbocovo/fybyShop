@@ -5,6 +5,7 @@ import { useCart } from '../../contexts/CartContext';
 import { useFirebase } from '../../contexts/FirebaseContext';
 import { useContentful } from '../../contexts/ContentfulContext';
 import LoginModal from '../Auth/LoginModal';
+import Logo from "/jaune.jpeg";
 import { Fade, Slide, Bounce, Zoom, Flip, Rotate, Roll, JackInTheBox, Hinge } from "react-awesome-reveal";
 
 const Header: React.FC = () => {
@@ -64,13 +65,15 @@ const Header: React.FC = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-3 rounded-xl group-hover:from-emerald-700 group-hover:to-teal-700 transition-all duration-200 shadow-lg">
-                  <ShoppingCart className="w-8 h-8 text-white" />
-                </div>
+                <img
+                  src={Logo}
+                  alt="fybyShop Logo"
+                  className="h-10 w-10 rounded-xl object-cover"
+                />
               </div>
               <Fade direction="right">
-              <span className="hidden md:block lg:block  text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent group-hover:from-emerald-700 group-hover:to-teal-700 transition-all duration-200">
-               FriedShop
+              <span className="hidden md:block lg:block logo text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400 ">
+               ybyShop
                 
               </span></Fade>
             </Link>
@@ -206,7 +209,7 @@ const Header: React.FC = () => {
                     Aucun produit trouvé pour "{searchTerm}"
                   </div>
                 )}
-              </div>
+              </div>LegalNotice
             </div>
           )}
 
@@ -244,7 +247,7 @@ const Header: React.FC = () => {
                     }}
                     className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-gray-50"
                   >
-                    Connexion
+                    ConnexionLegalNotice
                   </button>
                 )}
               </div>
@@ -261,4 +264,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default Header

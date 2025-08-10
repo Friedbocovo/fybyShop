@@ -96,7 +96,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold">FriedShop Admin</h1>
+                    <h1 class="text-2xl font-bold">fybyShop Admin</h1>
                     <p class="text-emerald-100 text-sm">Scanner de commandes QR</p>
                 </div>
             </div>
@@ -169,9 +169,9 @@
         const firebaseConfig = {
             // Remplacez par votre configuration Firebase
             apiKey: "AIzaSyB0W7cPNemaYdIRCmwbV5H6CdtcWsosces",
-            authDomain: "friedshop-bdca5.firebaseapp.com",
-            projectId: "friedshop-bdca5",
-            storageBucket: "friedshop-bdca5.firebasestorage.app",
+            authDomain: "fybyShop-bdca5.firebaseapp.com",
+            projectId: "fybyShop-bdca5",
+            storageBucket: "fybyShop-bdca5.firebasestorage.app",
             messagingSenderId: "1076611256538",
             appId: "1076611256538:web:711d8cabf1cd37abd355e3"
         };
@@ -253,9 +253,9 @@
             try {
                 const orderData = JSON.parse(result.data);
                 
-                // Vérifier que c'est bien un QR code de commande FriedShop
+                // Vérifier que c'est bien un QR code de commande fybyShop
                 if (!orderData.orderId || !orderData.customerName) {
-                    scanStatus.textContent = '⚠️ QR code non valide (pas une commande FriedShop)';
+                    scanStatus.textContent = '⚠️ QR code non valide (pas une commande fybyShop)';
                     return;
                 }
 
