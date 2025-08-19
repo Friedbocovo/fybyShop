@@ -11,11 +11,19 @@ const Footer: React.FC = () => {
           {/* Logo et description */}
           <Fade direction="left"cascade>
           <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-primary-600 p-2 rounded-lg">
-                <ShoppingCart className="h-6 w-6 text-white" />
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="relative">
+                <img
+                  src={Logo}
+                  alt="fybyShop Logo"
+                  className="h-10 w-10 rounded-xl object-cover"
+                />
               </div>
-              <span className="text-2xl font-bold">FriedShop</span>
+              <Fade direction="right">
+              <span className="hidden md:block lg:block logo text-xl sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400 ">
+               ybyShop
+                
+              </span></Fade>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
               Votre destination premium pour l'électronique de pointe. 
