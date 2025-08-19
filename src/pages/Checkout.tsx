@@ -515,7 +515,7 @@ const Checkout: React.FC = () => {
                       Nous vous contacterons sous 24h pour planifier votre rendez-vous de récupération.
                     </p>
                     <p className="text-blue-800 text-sm mt-1">
-                      <strong>Adresse :</strong> 123 Avenue des Champs-Élysées, 75008 Paris
+                      <strong>Adresse :</strong> Abomey Calavi, Benin
                     </p>
                   </div>
                 )}
@@ -563,7 +563,7 @@ const Checkout: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
+{/*
                   <div 
                     className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
                       paymentMethod === 'mobile_money' ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300'
@@ -580,10 +580,10 @@ const Checkout: React.FC = () => {
                         <p className="text-gray-600 text-sm">Paiement par mobile money (MTN, Moov)</p>
                       </div>
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
 
-                {/* Mobile Money Instructions */}
+                {/* Mobile Money Instructions 
                 {paymentMethod === 'mobile_money' && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                     <div className="flex items-start space-x-3">
@@ -612,7 +612,7 @@ const Checkout: React.FC = () => {
                     </div>
                   </div>
                 )}
-
+*/}
                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
                   <div className="flex items-start space-x-3">
                     <AlertCircle className="h-5 w-5 text-orange-600 mt-0.5" />
@@ -734,13 +734,13 @@ const Checkout: React.FC = () => {
                   <span>Sous-total</span>
                   <span>{(total ).toLocaleString('fr-FR')} FCFA</span>
                 </div>
-                
+                {/*
                 <div className="flex justify-between text-gray-600">
                   <span>Livraison</span>
                   <span className={finalDeliveryPrice === 0 ? 'text-emerald-600' : ''}>
                     {finalDeliveryPrice === 0 ? 'Gratuite' : `${finalDeliveryPrice.toLocaleString('fr-FR')} FCFA`}
                   </span>
-                </div>
+                </div>*/}
                 
                 <div className="flex justify-between text-lg font-bold text-gray-900 pt-2 border-t border-gray-200">
                   <span>Total</span>

@@ -411,7 +411,7 @@ ${order.customerInfo.address.city}, ${order.customerInfo.address.postalCode}
 ${order.customerInfo.address.country}`;
       } else {
         addressInfo = `🏪 *Retrait en magasin*
-Adresse du magasin: 123 Avenue des Champs-Élysées, 75008 Paris`;
+Abomey Calavi, Benin`;
       }
 
       const message = `🛒 *Nouvelle commande FriedShop*

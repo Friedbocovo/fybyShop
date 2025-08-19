@@ -238,7 +238,7 @@ const PrivacyPolicy: React.FC = () => {
               <h3 className="text-lg font-semibold mb-2">Courrier postal</h3>
               <p className="text-primary-100 text-sm">
                 FriedShop - DPO<br />
-                123 Avenue des Champs-Élysées<br />
+                Abomey Calavi, Benin<br />
                 75008 Paris, France
               </p>
             </div>

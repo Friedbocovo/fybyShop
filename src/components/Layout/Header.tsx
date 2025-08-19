@@ -72,7 +72,7 @@ const Header: React.FC = () => {
                 />
               </div>
               <Fade direction="right">
-              <span className="hidden md:block lg:block logo text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400 ">
+              <span className="hidden md:block lg:block logo text-xl sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400 ">
                ybyShop
                 
               </span></Fade>

@@ -120,8 +120,8 @@ ${order.customerInfo.address.street}
 ${order.customerInfo.address.city}, ${order.customerInfo.address.postalCode}
 ${order.customerInfo.address.country}`;
     } else {
-      addressInfo = `🏪 *Retrait en magasin*
-Adresse du magasin: 123 Avenue des Champs-Élysées, 75008 Paris`;
+      addressInfo = `🏪 *Retrait soi meme*
+          Abomey Calavi, Benin`;
     }
 
     const message = `🛒 *Nouvelle commande fybyShop*
@@ -130,12 +130,12 @@ Adresse du magasin: 123 Avenue des Champs-Élysées, 75008 Paris`;
 
 👤 *Client:* ${order.customerInfo.firstName} ${order.customerInfo.lastName}
 📧 *Email:* ${order.customerInfo.email}
-📱 *Téléphone:* ${order.customerInfo.phone}
+📱 *Téléphone:* ${deliveryTypeorder.customerInfo.phone}
 
 ${addressInfo}
 
 📦 *Produits commandés:*
-${order.items.map(item => `• ${item.name} x${item.quantity} - ${(item.price * 655).toLocaleString('fr-FR')} FCFA`).join('\n')}
+${order.items.map(item => `• ${item.name} x${item.quantity} - ${(item.price ).toLocaleString('fr-FR')} FCFA`).join('\n')}
 
 💰 *Total:* ${order.total.toLocaleString('fr-FR')} FCFA
 🚚 *${deliveryType}:* ${order.deliveryPrice === 0 ? 'Gratuite' : `${order.deliveryPrice.toLocaleString('fr-FR')} FCFA`}

@@ -128,11 +128,11 @@ const Cart: React.FC = () => {
                   <span>Sous-total</span>
                   <span>{total.toLocaleString('fr-FR')} FCFA</span>
                 </div>
-                
+                {/*
                 <div className="flex justify-between text-gray-600">
                   <span>Livraison</span>
                   <span className="text-green-600">Gratuite</span>
-                </div>
+                </div>*/}
                 
                 <div className="border-t border-gray-200 pt-3">
                   <div className="flex justify-between text-lg font-bold text-gray-900">
