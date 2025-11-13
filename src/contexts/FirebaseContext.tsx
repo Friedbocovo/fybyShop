@@ -414,7 +414,7 @@ ${order.customerInfo.address.country}`;
 Abomey Calavi, Benin`;
       }
 
-      const message = `🛒 *Nouvelle commande FriedShop*
+      const message = `🛒 *Nouvelle commande FybyShop*
 
 #${order.customerInfo.firstName}${order.customerInfo.lastName}#
 

@@ -111,7 +111,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const sendWhatsAppMessage = (order: Order) => {
-    const deliveryType = order.customerInfo.address ? 'Livraison' : 'Retrait en magasin';
+    const deliveryType = order.customerInfo.address ? 'Retrait en magasin' : 'Livraison';
     
     let addressInfo = '';
     if (order.customerInfo.address) {

@@ -32,7 +32,7 @@ const Contact: React.FC = () => {
         from_email: formData.email,
         subject: formData.subject,
         message: formData.message,
-        to_email: 'fybyShop00@gmail.com',
+        to_email: 'friedbocovo03@gmail.com',
         reply_to: formData.email
       };
 
@@ -319,7 +319,7 @@ const Contact: React.FC = () => {
           Message envoyé !
         </h2>
         <p className="text-gray-600 mb-6">
-          Votre message a été envoyé avec succès à <strong>fybyShop00@gmail.com</strong>.
+          Votre message a été envoyé avec succès à <strong>friedbocovo03gmail.com</strong>.
           Nous vous répondrons dans les plus brefs délais.
         </p>
         <Button

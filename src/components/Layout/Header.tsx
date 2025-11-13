@@ -62,6 +62,7 @@ const Header: React.FC = () => {
       <header className="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
@@ -72,31 +73,32 @@ const Header: React.FC = () => {
                 />
               </div>
               <Fade direction="right">
-              <span className="hidden md:block lg:block logo text-xl sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400 ">
-               ybyShop
-                
-              </span></Fade>
+                <span className="hidden md:block lg:block logo text-xl sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400 ">
+                  ybyShop
+                </span>
+              </Fade>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex space-x-6 xl:space-x-8">
               {navigation.map((item) => (
-                <Roll cascade>
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`text-sm font-medium transition-colors duration-200 relative group ${
-                    isActive(item.href)
-                      ? 'text-emerald-600'
-                      : 'text-gray-700 hover:text-emerald-600'
-                  }`}
-                > 
-
-                  {item.name}
-                  <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 transition-all duration-200 group-hover:w-full ${
-                    isActive(item.href) ? 'w-full' : ''
-                  }`}></span>
-                </Link> </Roll>
+                <Roll key={item.name} cascade>
+                  <Link
+                    to={item.href}
+                    className={`text-sm font-medium transition-colors duration-200 relative group ${
+                      isActive(item.href)
+                        ? 'text-emerald-600'
+                        : 'text-gray-700 hover:text-emerald-600'
+                    }`}
+                  >
+                    {item.name}
+                    <span
+                      className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 transition-all duration-200 group-hover:w-full ${
+                        isActive(item.href) ? 'w-full' : ''
+                      }`}
+                    ></span>
+                  </Link>
+                </Roll>
               ))}
             </nav>
 
@@ -115,7 +117,10 @@ const Header: React.FC = () => {
 
               {/* Account */}
               {isAuthenticated ? (
-                <Link to="/profile" className="flex items-center space-x-2 p-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">
+                <Link
+                  to="/profile"
+                  className="flex items-center space-x-2 p-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200"
+                >
                   <User className="h-5 w-5" />
                   <span className="hidden sm:block text-sm font-medium">{userProfile?.firstName}</span>
                 </Link>
@@ -166,7 +171,7 @@ const Header: React.FC = () => {
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   autoFocus
                 />
-                
+
                 {/* Search Results */}
                 {searchResults.length > 0 && (
                   <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl mt-1 max-h-96 overflow-y-auto z-50">
@@ -186,12 +191,12 @@ const Header: React.FC = () => {
                           <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
                           <p className="text-sm text-gray-500">{product.brand}</p>
                           <p className="text-sm font-semibold text-emerald-600">
-                            {(product.price).toLocaleString('fr-FR')} FCFA
+                            {product.price.toLocaleString('fr-FR')} FCFA
                           </p>
                         </div>
                       </Link>
                     ))}
-                    
+
                     {searchTerm.length > 2 && (
                       <Link
                         to={`/shop?search=${encodeURIComponent(searchTerm)}`}
@@ -203,7 +208,7 @@ const Header: React.FC = () => {
                     )}
                   </div>
                 )}
-                
+
                 {searchTerm.length > 2 && searchResults.length === 0 && (
                   <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl mt-1 p-4 text-center text-gray-500">
                     Aucun produit trouvé pour "{searchTerm}"
@@ -231,6 +236,7 @@ const Header: React.FC = () => {
                     {item.name}
                   </Link>
                 ))}
+
                 {isAuthenticated ? (
                   <Link
                     to="/profile"
@@ -256,12 +262,12 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={() => setIsLoginModalOpen(false)} 
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
       />
     </>
   );
 };
 
-export default Header
+export default Header;

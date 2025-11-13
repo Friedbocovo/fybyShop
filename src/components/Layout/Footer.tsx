@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Mail, Phone, MapPin, Facebook, Twitter, TikTok, Instagram, Youtube } from 'lucide-react';
 import { Fade, Slide, Bounce, Zoom, Flip, Rotate, Roll, JackInTheBox, Hinge } from "react-awesome-reveal";
+import Logo from "/jaune.jpeg";
 
 const Footer: React.FC = () => {
   return (
